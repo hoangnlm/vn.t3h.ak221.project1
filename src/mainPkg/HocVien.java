@@ -1,15 +1,17 @@
 package mainPkg;
 
+import java.io.Serializable;
+
 import utilPkg.ValUtils;
 
-public class HocVien extends ValUtils {
+public class HocVien extends ValUtils implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private String maHV, hoTen, ngaySinh, email, diaChi, soDt, maLop;
 	public static final int HV_MIN_AGE = 17;
 	public static final int HV_MAX_AGE = 40;
-	
-	public HocVien() {
-		// TODO Auto-generated constructor stub
-	}
 	
 	public HocVien(String maHV, String hoTen, String ngaySinh, String email, String diaChi, String soDt,
 	String maLop) throws Exception{
@@ -29,7 +31,7 @@ public class HocVien extends ValUtils {
 	public void setMaHV(String maHV) throws Exception{
 		maHV = maHV.trim().toUpperCase();
 		valEmpty(maHV);
-		valFormat(maHV, "HV\\d{3}");
+		valFormat(maHV, "HV\\d{3}", "Mã HV phải có định dạng HVxxx.");
 		this.maHV = maHV;
 	}
 
@@ -49,7 +51,7 @@ public class HocVien extends ValUtils {
 	}
 
 	public void setNgaySinh(String ngaySinh) throws Exception {
-		valAge(ngaySinh, HV_MIN_AGE, HV_MAX_AGE);
+		valAge(ngaySinh, HV_MIN_AGE, HV_MAX_AGE, null);
 		this.ngaySinh = ngaySinh;
 	}
 	
@@ -59,7 +61,7 @@ public class HocVien extends ValUtils {
 
 	public void setEmail(String email) throws Exception{
 		email = email.trim();
-		valEmail(email);
+		valEmail(email, "Địa chỉ email không hợp lệ!");
 		this.email = email;
 	}
 
@@ -77,7 +79,7 @@ public class HocVien extends ValUtils {
 	}
 
 	public void setSoDt(String soDt) throws Exception {
-		valPhone(soDt);
+		valPhone(soDt, "Số điện thoại 10 chữ số hoặc (+84)xxx.");
 		this.soDt = soDt;
 	}
 
@@ -87,6 +89,19 @@ public class HocVien extends ValUtils {
 
 	public void setMaLop(String maLop) {
 		this.maLop = maLop;
+	}
+	
+	@Override
+	public String toString() {
+		StringBuilder kq = new StringBuilder(150);
+		kq.append("\nMã HV: "+getMaHV());
+		kq.append("\nHọ tên: "+getHoTen());
+		kq.append("\nNgày sinh: "+getNgaySinh());
+		kq.append("\nEmail: "+getEmail());
+		kq.append("\nĐịa chỉ: "+getDiaChi());
+		kq.append("\nĐiện thoại: "+getSoDt());
+		kq.append("\nMã lớp: "+getMaLop());
+		return kq.toString();
 	}
 }
 

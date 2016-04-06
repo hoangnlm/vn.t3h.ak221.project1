@@ -1,92 +1,60 @@
 package utilPkg;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.EOFException;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
-import java.util.List;
-
+import java.util.LinkedList;
 import mainPkg.HocVien;
 
-public class IOUtils2 extends IOUtils {
-//	 ghi du lieu HocVien duoi dang data stream
-	public static void writeHocVienByDataStream(String path, List<HocVien> countries) throws IOException {
-		// Buoc 1: mo stream
-		DataOutputStream dataOutputStream = new DataOutputStream(new BufferedOutputStream(new FileOutputStream(path)));
+public class IOUtils2 {
+	private static String filePath = "/Users/Hoang/Documents/Eclipse/workspace/vn.t3h.ak221.project1/src/data/hocvien.dat";
 
-		// Buoc 2: ghi file
-		for (HocVien country : countries) {
-//			dataOutputStream.writeUTF(country.getName());
-//			dataOutputStream.writeLong(country.getPopulation());
-//			dataOutputStream.writeDouble(country.getArea());
-		}
-
-		// Buoc 3: dong stream
-		dataOutputStream.close();
-
+	public static String getFilePath() {
+		return filePath;
 	}
 
-	// Doc file tu DataStream
-	public static List<HocVien> readHocVienByDataStream(String path) throws IOException {
-		// List<HocVien> countries = null; //Phai check if !=null khi dung
-		List<HocVien> countries = new ArrayList<>(); // Cach nay khong kiem tra
-														// !=null
-
-		// Buoc 1: mo stream
-		DataInputStream dataInputStream = new DataInputStream(new BufferedInputStream(new FileInputStream(path)));
-
-		// Buoc 2: doc file
-		try {
-			while (true) {
-				String name = dataInputStream.readUTF();
-				long pop = dataInputStream.readLong();
-				double area = dataInputStream.readDouble();
-				countries.add(new HocVien());
-			}
-		} catch (Exception e) { // Khi da doc het file se quang roi
-									// EOFException
-			System.out.println("het file");
-		}
-
-		// Buoc 3: dong stream
-		dataInputStream.close();
-
-		return countries;
+	public static void setFilePath(String filePath) {
+		IOUtils2.filePath = filePath;
 	}
 
-	// Viet du lieu tu ObjectStream
-	public static void writeHocVienByObjectStream(String path, List<HocVien> countries) throws IOException {
-		ObjectOutputStream objectOutputStream = new ObjectOutputStream(
-				new BufferedOutputStream(new FileOutputStream(path)));
-		for (HocVien country : countries) {
-			objectOutputStream.writeObject(country);
-		}
-		objectOutputStream.close();
-	}
-
-	// Doc du lieu tu ObjectStream
-	public static List<HocVien> readHocVienByObjectStream(String path) throws IOException, ClassNotFoundException {
-		List<HocVien> countries = new ArrayList<>();
-		ObjectInputStream objectInputStream = new ObjectInputStream(new BufferedInputStream(new FileInputStream(path)));
+	// Write from ObjectStream to file
+	public static void writeObjectStream(LinkedList<HocVien> hocViens) throws Exception {
+		ObjectOutputStream objectOutputStream = null;
 
 		try {
-			while (true) {
-				countries.add((HocVien) objectInputStream.readObject());
+			objectOutputStream = new ObjectOutputStream(new FileOutputStream(filePath));
+
+			for (HocVien hv : hocViens) {
+				objectOutputStream.writeObject(hv);
 			}
-		} catch (EOFException e) {
-			System.out.println("het file");
+		} finally {
+			if (objectOutputStream != null)
+				objectOutputStream.close();
+		}
+	}
+
+	// Read from ObjectStream to a list variable
+	public static LinkedList<HocVien> readObjectStream() throws Exception {
+		LinkedList<HocVien> hocViens = new LinkedList<>();
+		ObjectInputStream objectInputStream = null;
+
+		try {
+			objectInputStream = new ObjectInputStream(new FileInputStream(filePath));
+
+			try {
+				while (true) {
+					hocViens.add((HocVien) objectInputStream.readObject());
+				}
+			} catch (EOFException e) {
+				// Khong can lam gi het
+			}
+		} finally {
+			if (objectInputStream != null)
+				objectInputStream.close();
 		}
 
-		objectInputStream.close();
-
-		return countries;
+		return hocViens;
 	}
-	
 }

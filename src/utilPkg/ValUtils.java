@@ -36,9 +36,10 @@ public class ValUtils {
 	 * Validate an email string. Not check for empty.
 	 * 
 	 * @param obj
+	 * @param message
 	 * @throws Exception
 	 */
-	public static void valEmail(String obj) throws Exception {
+	public static void valEmail(String obj, String message) throws Exception {
 		valFormat(obj, "\\b[\\w.-]+@[-.\\w]+\\.[A-Za-z]{2,4}\\b", "Invalid email format!");
 	}
 
@@ -55,10 +56,11 @@ public class ValUtils {
 	 * Validate string phone number.
 	 * 
 	 * @param obj
+	 * @param message
 	 * @throws Exception
 	 */
-	public static void valPhone(String obj) throws Exception {
-		valFormat(obj, "\\d{10,12}|\\Q(+84)\\E\\d{9,11}", "Invalid phone format!");
+	public static void valPhone(String obj, String message) throws Exception {
+		valFormat(obj, "\\d{10,12}|\\Q(+84)\\E\\d{9,11}", message!=null?message:"Invalid phone format!");
 	}
 
 	/**
@@ -67,9 +69,10 @@ public class ValUtils {
 	 * @param obj
 	 * @param min
 	 * @param max
+	 * @param message
 	 * @throws Exception
 	 */
-	public static void valAge(String obj, Integer min, Integer max) throws Exception {
+	public static void valAge(String obj, Integer min, Integer max, String message) throws Exception {
 		valDate(obj);
 		valRangedValue(min, MIN_AGE, "Min age must be from "+MIN_AGE+"!");
 		valRangedValue(max, null, MAX_AGE, "Max age must be under "+MAX_AGE+"!");
@@ -91,12 +94,12 @@ public class ValUtils {
 		//inputCal phai truoc hoac bang minCal khi tuoi >= min
 		//compareTo tra ve tri >0 khi inputCal nam sau minCal
 		if(inputCal.compareTo(minCal)>0)
-			throw new IllegalArgumentException("Age must be from "+min+"!");
+			throw new IllegalArgumentException(message!=null?message:"Age must be from "+min+"!");
 		
 		//inputCal phai sau hoac bang maxCal khi tuoi <= max
 		//compareTo tra ve tri <0 khi inputCal nam truoc maxCal
 		if(inputCal.compareTo(maxCal)<0)
-			throw new IllegalArgumentException("Age must be under "+max+"!");
+			throw new IllegalArgumentException(message!=null?message:"Age must be under "+max+"!");
 		
 	}
 

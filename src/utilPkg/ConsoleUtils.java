@@ -72,8 +72,4 @@ public class ConsoleUtils {
 		System.out.println();
 		return kq;
 	}
-
-	protected static void exit() {
-		printt("\nGoodbye! See you again! ^^");
-	}
 }
